@@ -1,0 +1,142 @@
+/* ===== Gruvbox DARK for Firefox chrome (v140+) =====
+   Drop in chrome/userChrome.css
+   Toggle light theme: change the palette in :root
+===================================================== */
+
+:root {
+  /* Gruvbox Dark palette */
+  --gb-bg0:    #282828;
+  --gb-bg1:    #3c3836;
+  --gb-bg2:    #504945;
+  --gb-fg:     #ebdbb2;
+  --gb-muted:  #a89984;
+  --gb-yellow: #d79921;
+  --gb-blue:   #83a598;
+
+  /* app-wide bg hook (was --custom-bg) */
+  --custom-bg: var(--gb-bg0);
+}
+
+/* ---- Global chrome background ---- */
+body,
+#browser,
+#navigator-toolbox,
+#TabsToolbar,
+#nav-bar,
+#sidebar-box,
+#sidebar {
+  background-color: var(--custom-bg) !important;
+  color: var(--gb-fg) !important;
+}
+
+/* Remove default bottom line under toolbars */
+#navigator-toolbox { border-bottom: 0 !important; padding-top: 3px; padding-bottom: 4px; }
+
+/* ---- Hide native tab bar (we use Sidebery) ---- */
+#TabsToolbar { visibility: collapse !important; }
+
+/* ---- Sidebar tidy: remove header row ---- */
+#sidebar-header { display: none !important; }
+
+/* ---- Splitter: invisible + 1px so hover expand feels clean ---- */
+#sidebar-splitter {
+  width: 1px !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+/* ---- Center the URL bar neatly ---- */
+#nav-bar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px;
+  background: var(--custom-bg) !important;
+}
+
+/* keep toolbar buttons readable on dark bg */
+#nav-bar .toolbarbutton-1 > .toolbarbutton-icon,
+#nav-bar .toolbarbutton-1 > .toolbarbutton-badge-stack {
+  fill: var(--gb-fg) !important;
+  color: var(--gb-fg) !important;
+}
+
+/* limit urlbar width and remove breakout bg */
+#urlbar {
+  max-width: 960px !important;
+  margin-inline: auto !important;
+}
+#urlbar:not([breakout-extend]) #urlbar-background {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* identity label in address bar is visual noise */
+#identity-icon-label { display: none !important; }
+
+/* macOS window buttons positioning (adjust top if needed) */
+.titlebar-buttonbox-container {
+  position: absolute !important;
+  right: 0; top: 9px;
+  width: 110px !important;
+  display: flex; justify-content: center;
+}
+.titlebar-button { width: 36px !important; }
+
+/* ---- Sidebery-as-sidebar: compact → expand on hover ---- */
+#sidebar-box {
+  --uc-sidebar-width: 60px;
+  --uc-sidebar-hover-width: 360px;
+
+  position: relative;
+  min-width: var(--uc-sidebar-width) !important;
+  width:     var(--uc-sidebar-width) !important;
+  max-width: var(--uc-sidebar-width) !important;
+  z-index: 4 !important;
+}
+
+#main-window[sizemode="fullscreen"] #sidebar-box {
+  --uc-sidebar-width: 1px;
+}
+
+/* actual iframe panel width */
+#sidebar {
+  min-width: var(--uc-sidebar-width) !important;
+}
+
+/* expand smoothly when hovering the whole box */
+#sidebar-box:hover > .sidebar-browser-stack > #sidebar {
+  min-width: var(--uc-sidebar-hover-width) !important;
+}
+
+/* panel text colors match gruvbox */
+.sidebar-panel {
+  background-color: transparent !important;
+  color: var(--gb-fg) !important;
+}
+
+/* ---- Subtle separators & hover feedback ---- */
+#nav-bar, #navigator-toolbox {
+  box-shadow: 0 1px 0 0 var(--gb-bg1) inset;
+}
+toolbarbutton:hover:not([disabled="true"]) {
+  background-color: color-mix(in srgb, var(--gb-bg1) 80%, transparent) !important;
+  border-radius: 6px;
+}
+
+/* ---- Optional accents: highlight active urlbar edge ---- */
+#urlbar[focused="true"] {
+  outline: 1px solid var(--gb-yellow) !important;
+  border-radius: 8px !important;
+}
+
+/* ---- Private window compatibility: keep same look ---- */
+:root[privatebrowsingmode="temporary"] body,
+:root[privatebrowsingmode="temporary"] #navigator-toolbox,
+:root[privatebrowsingmode="temporary"] #nav-bar,
+:root[privatebrowsingmode="temporary"] #sidebar-box,
+:root[privatebrowsingmode="temporary"] #sidebar {
+  background-color: var(--custom-bg) !important;
+  color: var(--gb-fg) !important;
+}
+
